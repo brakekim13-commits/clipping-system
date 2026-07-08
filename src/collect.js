@@ -7,7 +7,11 @@ async function collectFromPortal(browser, portal) {
   });
   const items = [];
   try {
-    await page.goto(portal.url, { waitUntil: "networkidle", timeout: 30000 });
+    // networkidle 대신 domcontentloaded로 완화 (jleague.jp 등 광고/분석
+    // 스크립트가 계속 통신하는 사이트는 networkidle이 영영 안 걸림)
+    await page.goto(portal.url, { waitUntil: "domcontentloaded", timeout: 45000 });
+    // 화면이 실제로 그려질 시간을 넉넉히 확보
+    await page.waitForTimeout(3000);
     await page.mouse.wheel(0, 2000);
     await page.waitForTimeout(1500);
 
