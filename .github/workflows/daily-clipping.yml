@@ -29,10 +29,11 @@ jobs:
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
         run: npm start
 
-      - name: Commit updated cache
+- name: Commit updated cache
         run: |
           git config user.name "bp-clipping-bot"
           git config user.email "actions@github.com"
           git add cache.json
           git diff --staged --quiet || git commit -m "chore: update dedup cache [skip ci]"
+          git pull --rebase origin main
           git push
